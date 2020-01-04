@@ -1,7 +1,7 @@
 #pragma once
 class Enemy {
-	int x = 18;
-	int	y = 18;
+	int x = 10;
+	int	y = 10;
 	int id = 3;
 	int lastX = -1;
 	int	lastY = -1;
@@ -15,9 +15,9 @@ class Enemy {
 	bool Up = true, Down = true, Right = true, Left = true;
 
 	//Enemy setting
-	int playerNum = 10;
+	float playerNum = 50;
 	float voidNum = 0.9;
-	int mulCellFactor = 3;
+	int mulCellFactor = 2;
 
 public:
 
@@ -162,20 +162,31 @@ public:
 	void takeStep() {
 		lastX = x;
 		lastY = y;
-		vector<float> dir{ up, down, right, left };
-		int max = dir[0], maxI = 0;
-		for (int i = 1; i < dir.size(); i++) {
-			if (dir[i] > max) {
-				max = dir[i];
+		vector<float> directions{ up, down, right, left };
+		vector<float> ways;
+		float max = directions[0];
+		int dir = -1, maxI = 0;
+
+		for (int i = 1; i < directions.size(); i++) {
+			if (directions[i] > max) {
+				max = directions[i];
 				maxI = i;
 			}
 		}
-		
+		ways.push_back(maxI);
+		dir = ways[0];
+		//Test
+		for (int i = 0; i < directions.size(); i++) {
+			if (i == maxI) continue;
+			if (directions[i] == max)  ways.push_back(i);
+		}
+		srand(time(NULL));
+		dir = ways[rand() % ways.size()];
 
-		if (maxI == 0) y--;
-		if (maxI == 1) y++;
-		if (maxI == 2) x++;
-		if (maxI == 3) x--;
+		if (dir == 0) y--;
+		if (dir == 1) y++;
+		if (dir == 2) x++;
+		if (dir == 3) x--;
 
 		//switch (maxI)
 		//{
@@ -204,18 +215,38 @@ public:
 
 
 	//Test
-	//void showFeildOfView() {
-	//	for (size_t i = 0; i < fieldOfView.size(); i++)	{
-	//		for (size_t j = 0; j < fieldOfView[0].size(); j++) {
-	//			if (fieldOfView[i][j] == -1) cout << "# ";
-	//			else if (fieldOfView[i][j] == playerNum) cout << "* ";
-	//			else if (fieldOfView[i][j] == -2 || fieldOfView.size() / 2 == i && fieldOfView[0].size() / 2 == j) cout << "0 ";
-	//			else if (fieldOfView[i][j] == (float)voidNum) cout << "! ";
-	//			else if (fieldOfView[i][j] == 0) cout << "  ";
-	//		}
-	//		cout << endl;
-	//	}
-	//}
+
+	void setCursor(int x, int y) {
+		COORD cord;
+		//1 unit = 0.5 width and 1 height
+		cord.X = x * 2;
+		cord.Y = y;
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cord);
+	}
+	void showFeildOfView() {
+		int w = 21;
+		for (size_t i = 0; i < fieldOfView.size(); i++)	{
+			setCursor(w, i + 1);
+
+			for (size_t j = 0; j < fieldOfView[0].size(); j++) {
+				if (fieldOfView[i][j] == -1) cout << "# ";
+				else if (fieldOfView[i][j] == playerNum) cout << "* ";
+				else if (fieldOfView[i][j] == -2 || fieldOfView.size() / 2 == i && fieldOfView[0].size() / 2 == j) cout << "0 ";
+				else if (fieldOfView[i][j] == (float)voidNum) cout << "! ";
+				else cout << "  ";
+			}
+			
+		}
+
+		setCursor(w, fieldOfView.size() + 1);
+		cout << "Up: " << up << endl;
+		setCursor(w, fieldOfView.size() + 2);
+		cout << "Down: " << down << endl;
+		setCursor(w, fieldOfView.size() + 3);
+		cout << "Right: " << right << endl;
+		setCursor(w, fieldOfView.size() + 4);
+		cout << "Left: " << left << endl;
+	}
 
 	char getChar() {
 		return character;

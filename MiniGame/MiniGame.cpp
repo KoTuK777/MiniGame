@@ -30,7 +30,7 @@ int main()
 {
 
 	Game game;
-	game.generateMap(20, 20, 20);
+	game.generateMap(20, 20, 0);
 	game.start();
 	//game.testFunc();
 

@@ -30,7 +30,7 @@ public:
 
 	void moves(int key, vector<vector<int>>& map) {
 		lastX = x;
-		lastX = y;
+		lastY = y;
 		bool up = false, left = false, down = false, right = false;
 
 		switch (key) {

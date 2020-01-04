@@ -144,20 +144,32 @@ public:
 	void eventsListener() {
 		//Moves of player
 		player.moves(_getch(), map);
-		enemies[0].moves(map);
-
+		//enemies[0].moves(map);
+		enemies[0].createViewField(map);
+		enemies[0].calculateNextStep();
+		enemies[0].showFeildOfView();
+		enemies[0].takeStep();
+		
 	}
 
-	/*void testFunc() {
+	void testFunc() {
 		showMap();
 		showEntities();
-		cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 
 		enemies.push_back(Enemy());
-		enemies[0].createViewField(map);
-		enemies[0].showFeildOfView();
-		enemies[0].calculateNextStep();
-	}*/
+
+		do {
+			
+			enemies[0].moves(map);
+			/*enemies[0].createViewField(map);
+			enemies[0].calculateNextStep();*/
+			enemies[0].showFeildOfView();
+
+			/*updateMap();
+			showEntities();*/
+			Sleep(1000);
+		} while (true);
+	}
 
 	void start() {
 		enemies.push_back(Enemy());
